@@ -1,4 +1,8 @@
+import Link from 'next/link'
+
 export default function Footer() {
+  const linkStyle = { color: 'var(--color-ink-soft)', textDecoration: 'none' }
+
   return (
     <footer
       style={{
@@ -19,7 +23,7 @@ export default function Footer() {
         >
           Ko-fi
         </a>
-        
+
         <a
           href="https://instagram.com/yourusername"
           target="_blank"
@@ -28,7 +32,10 @@ export default function Footer() {
         >
           Instagram
         </a>
-        
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 16, marginBottom: 12, flexWrap: 'wrap', fontSize: 13 }}>
+        <Link href="/terms" style={linkStyle}>Terms & Privacy</Link>
       </div>
 
       © {new Date().getFullYear()} PaperPlanes — Letters worth sending.

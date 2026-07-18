@@ -65,9 +65,9 @@ export default function Dashboard() {
 
   return (
     <div style={{ maxWidth: 700, margin: '40px auto', padding: 20 }}>
-      <h1>Welcome, {profile?.username}</h1>
+      <h1 style={{ fontSize: 32 }}>Welcome, {profile?.username}</h1>
 
-      <h2>Your Letters</h2>
+      <h2 style={{ fontSize: 24 }}>Your Letters</h2>
 
       {letters.length === 0 && (
         <div className="letter-card" style={{ padding: 32, textAlign: 'center', marginBottom: 24 }}>
