@@ -20,76 +20,93 @@ export default function Header() {
   const linkStyle = {
     textDecoration: 'none',
     color: 'var(--color-ink)',
-    fontSize: 19,
+    fontSize: 17,
   }
 
   return (
     <header style={{ background: '#FAF9F6', padding: '16px 20px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
         <Link
-  href="/"
-  style={{
-    display: 'flex',
-    alignItems: 'center',
-    gap: 10,
-    fontFamily: 'var(--font-display)',
-    textDecoration: 'none',
-    color: 'var(--color-ink)',
-    fontSize: 24,
-  }}
->
-  <img src="/images/logo.png" alt="PaperPlanes" style={{ width: 32, height: 32 }} />
-  PaperPlanes
-</Link>
+          href="/"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
+            fontFamily: 'var(--font-display)',
+            textDecoration: 'none',
+            color: 'var(--color-ink)',
+            fontSize: 24,
+            flexShrink: 0,
+          }}
+        >
+          <img src="/images/logo.png" alt="PaperPlanes" style={{ width: 32, height: 32, flexShrink: 0 }} />
+          PaperPlanes
+        </Link>
 
-        <nav className="desktop-nav" style={{ display: 'flex', gap: 24, alignItems: 'center', fontSize: 17 }}>
+        <nav
+          className="desktop-nav"
+          style={{
+            display: 'flex',
+            gap: 24,
+            alignItems: 'center',
+            fontSize: 17,
+            flex: 1,
+            justifyContent: 'center',
+          }}
+        >
           <Link href="/feed" style={linkStyle}>Feed</Link>
           <Link href="/about" style={linkStyle}>About</Link>
           {user && <Link href="/write" style={linkStyle}>Write a Letter</Link>}
           {user && <Link href="/dashboard" style={linkStyle}>Dashboard</Link>}
         </nav>
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 12 }}>
-          <button
-            className="hamburger-button"
-            onClick={() => setMenuOpen(!menuOpen)}
-            style={{ display: 'none', background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: 'var(--color-ink)' }}
-            aria-label="Menu"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <line x1="3" y1="12" x2="21" y2="12" />
-              <line x1="3" y1="18" x2="21" y2="18" />
-            </svg>
-          </button>
-
-          <div className="desktop-nav">
-            {user ? (
-              <button
-                onClick={handleLogout}
-                style={{
-                  cursor: 'pointer',
-                  background: 'none',
-                  border: '1px solid var(--color-line)',
-                  borderRadius: 6,
-                  padding: '6px 14px',
-                  fontFamily: 'var(--font-ui)',
-                  fontSize: 14,
-                  color: 'var(--color-ink-soft)',
-                }}
-              >
-                Log Out
-              </button>
-            ) : (
-              <Link
-                href="/login"
-                style={{ ...linkStyle, padding: '6px 16px', background: 'var(--color-accent)', color: '#fff', borderRadius: 6 }}
-              >
-                Log In
-              </Link>
-            )}
-          </div>
+        <div className="desktop-nav" style={{ flexShrink: 0 }}>
+          {user ? (
+            <button
+              onClick={handleLogout}
+              style={{
+                cursor: 'pointer',
+                background: 'none',
+                border: '1px solid var(--color-line)',
+                borderRadius: 6,
+                padding: '6px 14px',
+                fontFamily: 'var(--font-ui)',
+                fontSize: 14,
+                color: 'var(--color-ink-soft)',
+              }}
+            >
+              Log Out
+            </button>
+          ) : (
+            <Link
+              href="/login"
+              style={{ ...linkStyle, padding: '6px 16px', background: 'var(--color-accent)', color: '#fff', borderRadius: 6 }}
+            >
+              Log In
+            </Link>
+          )}
         </div>
+
+        <button
+          className="hamburger-button"
+          onClick={() => setMenuOpen(!menuOpen)}
+          style={{
+            display: 'none',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: 4,
+            color: 'var(--color-ink)',
+            flexShrink: 0,
+          }}
+          aria-label="Menu"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
       </div>
 
       {menuOpen && (
