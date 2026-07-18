@@ -24,7 +24,15 @@ export default function Header() {
   }
 
   return (
-    <header style={{ background: '#FAF9F6', padding: '16px 20px' }}>
+    <header
+  style={{
+    background: '#FAF9F6',
+    padding: '16px 20px',
+    position: 'sticky',
+    top: 0,
+    zIndex: 50,
+  }}
+>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
         <Link
           href="/"
