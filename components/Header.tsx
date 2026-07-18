@@ -27,20 +27,20 @@ export default function Header() {
     <header style={{ background: '#FAF9F6', padding: '16px 20px' }}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center' }}>
         <Link
-          href="/"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            fontFamily: 'var(--font-display)',
-            textDecoration: 'none',
-            color: 'var(--color-ink)',
-            fontSize: 19,
-          }}
-        >
-          <img src="/images/logo.png" alt="PaperPlanes" style={{ width: 24, height: 24 }} />
-          PaperPlanes
-        </Link>
+  href="/"
+  style={{
+    display: 'flex',
+    alignItems: 'center',
+    gap: 10,
+    fontFamily: 'var(--font-display)',
+    textDecoration: 'none',
+    color: 'var(--color-ink)',
+    fontSize: 24,
+  }}
+>
+  <img src="/images/logo.png" alt="PaperPlanes" style={{ width: 32, height: 32 }} />
+  PaperPlanes
+</Link>
 
         <nav className="desktop-nav" style={{ display: 'flex', gap: 24, alignItems: 'center', fontSize: 17 }}>
           <Link href="/feed" style={linkStyle}>Feed</Link>

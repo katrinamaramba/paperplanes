@@ -19,23 +19,16 @@ export default async function LetterPage({ params }: { params: Promise<{ share_t
     <div style={{ maxWidth: 600, margin: '40px auto', padding: 20 }}>
       <h1 style={{ fontSize: 32 }}>A letter for {letter.recipient_name}</h1>
 
-      {letter.is_public ? (
-        letter.author_username && (
-          <p style={{ color: 'var(--color-ink-soft)', marginTop: -10 }}>
-            Written by {letter.author_username}
-          </p>
-        )
-      ) : (
-        letter.sender_name && (
-          <p className="signature" style={{ marginTop: -10 }}>
-            From {letter.sender_name}
-          </p>
-        )
-      )}
-
       <div className="letter-card" style={{ padding: 32, marginTop: 24 }}>
         <p className="letter-content" style={{ whiteSpace: 'pre-wrap', margin: 0 }}>
           {letter.content}
+        </p>
+
+        <p
+          className="signature"
+          style={{ textAlign: 'right', marginTop: 24, marginBottom: 0 }}
+        >
+          {letter.is_public ? letter.author_username : letter.sender_name}
         </p>
       </div>
 
