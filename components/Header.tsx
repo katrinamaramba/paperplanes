@@ -1,7 +1,7 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { useAuth } from '@/context/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -9,10 +9,12 @@ import { useRouter } from 'next/navigation'
 export default function Header() {
   const { user } = useAuth()
   const router = useRouter()
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
     router.push('/')
+    setMenuOpen(false)
   }
 
   const linkStyle = {
@@ -22,78 +24,138 @@ export default function Header() {
   }
 
   return (
-    <header
-      style={{
-        background: '#FAF9F6', /* Changed to perfectly match the body's warm cream */
-        padding: '16px 20px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: 12,
-      }}
-    >
-      <Link
-        href="/"
-        style={{
-          fontFamily: 'var(--font-display)',
-          textDecoration: 'none',
-          color: 'var(--color-ink)',
-          fontSize: 18,
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-        }}
-      >
-        <Image
-          src="/images/logo.png"
-          alt="PaperPlanes Logo"
-          width={28}
-          height={28}
-          style={{ objectFit: 'contain' }}
-        />
-        <span>PaperPlanes</span>
-      </Link>
-
-      <nav style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap', fontSize: 14 }}>
-        <Link href="/feed" style={linkStyle}>Feed</Link>
-        <Link href="/about" style={linkStyle}>About</Link>
-
-        {user ? (
-          <>
-            <Link href="/write" style={linkStyle}>Write a Letter</Link>
-            <Link href="/dashboard" style={linkStyle}>Dashboard</Link>
-            <button
-              onClick={handleLogout}
-              style={{
-                cursor: 'pointer',
-                background: 'none',
-                border: '1px solid var(--color-line)',
-                borderRadius: 6,
-                padding: '6px 14px',
-                fontFamily: 'var(--font-ui)',
-                fontSize: 14,
-                color: 'var(--color-ink-soft)',
-              }}
-            >
-              Log Out
-            </button>
-          </>
-        ) : (
-          <Link
-            href="/login"
+    <header style={{ background: '#FAF9F6', padding: '16px 20px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <button
+            className="hamburger-button"
+            onClick={() => setMenuOpen(!menuOpen)}
             style={{
-              ...linkStyle,
-              padding: '6px 16px',
-              background: 'var(--color-accent)',
-              color: '#fff',
-              borderRadius: 6,
+              display: 'none',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: 4,
+              color: 'var(--color-ink)',
+            }}
+            aria-label="Menu"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </button>
+
+          <Link
+            href="/"
+            style={{
+              fontFamily: 'var(--font-display)',
+              textDecoration: 'none',
+              color: 'var(--color-ink)',
+              fontSize: 18,
             }}
           >
-            Log In
+            PaperPlanes
           </Link>
-        )}
-      </nav>
+        </div>
+
+        <nav className="desktop-nav" style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap', fontSize: 14 }}>
+          <Link href="/feed" style={linkStyle}>Feed</Link>
+          <Link href="/about" style={linkStyle}>About</Link>
+
+          {user ? (
+            <>
+              <Link href="/write" style={linkStyle}>Write a Letter</Link>
+              <Link href="/dashboard" style={linkStyle}>Dashboard</Link>
+              <button
+                onClick={handleLogout}
+                style={{
+                  cursor: 'pointer',
+                  background: 'none',
+                  border: '1px solid var(--color-line)',
+                  borderRadius: 6,
+                  padding: '6px 14px',
+                  fontFamily: 'var(--font-ui)',
+                  fontSize: 14,
+                  color: 'var(--color-ink-soft)',
+                }}
+              >
+                Log Out
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/login"
+              style={{
+                ...linkStyle,
+                padding: '6px 16px',
+                background: 'var(--color-accent)',
+                color: '#fff',
+                borderRadius: 6,
+              }}
+            >
+              Log In
+            </Link>
+          )}
+        </nav>
+      </div>
+
+      {menuOpen && (
+        <nav
+          className="mobile-menu-panel"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 16,
+            marginTop: 16,
+            paddingTop: 16,
+            borderTop: '1px solid var(--color-line)',
+          }}
+        >
+          <Link href="/feed" style={linkStyle} onClick={() => setMenuOpen(false)}>Feed</Link>
+          <Link href="/about" style={linkStyle} onClick={() => setMenuOpen(false)}>About</Link>
+
+          {user ? (
+            <>
+              <Link href="/write" style={linkStyle} onClick={() => setMenuOpen(false)}>Write a Letter</Link>
+              <Link href="/dashboard" style={linkStyle} onClick={() => setMenuOpen(false)}>Dashboard</Link>
+              <button
+                onClick={handleLogout}
+                style={{
+                  cursor: 'pointer',
+                  background: 'none',
+                  border: '1px solid var(--color-line)',
+                  borderRadius: 6,
+                  padding: '8px 14px',
+                  fontFamily: 'var(--font-ui)',
+                  fontSize: 14,
+                  color: 'var(--color-ink-soft)',
+                  textAlign: 'left',
+                }}
+              >
+                Log Out
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/login"
+              style={{
+                ...linkStyle,
+                padding: '8px 16px',
+                background: 'var(--color-accent)',
+                color: '#fff',
+                borderRadius: 6,
+                display: 'inline-block',
+                width: 'fit-content',
+              }}
+              onClick={() => setMenuOpen(false)}
+            >
+              Log In
+            </Link>
+          )}
+        </nav>
+      )}
     </header>
   )
 }

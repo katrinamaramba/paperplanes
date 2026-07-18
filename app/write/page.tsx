@@ -112,24 +112,24 @@ export default function WriteLetter() {
       <h1>Write a Letter</h1>
 
       <form onSubmit={handleSubmit} className="letter-card" style={{ padding: 28, marginTop: 20 }}>
-        <div style={{ marginBottom: 20 }}>
-          <label style={{ marginRight: 16 }}>
-            <input
-              type="radio"
-              checked={isPublic}
-              onChange={() => setIsPublic(true)}
-            />
-            {' '}Share publicly
-          </label>
-          <label>
-            <input
-              type="radio"
-              checked={!isPublic}
-              onChange={() => setIsPublic(false)}
-            />
-            {' '}Send privately
-          </label>
-        </div>
+        <div className="public-private-choice" style={{ marginBottom: 20, display: 'flex', gap: 16, alignItems: 'center' }}>
+  <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+    <input
+      type="radio"
+      checked={isPublic}
+      onChange={() => setIsPublic(true)}
+    />
+    Share publicly
+  </label>
+  <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+    <input
+      type="radio"
+      checked={!isPublic}
+      onChange={() => setIsPublic(false)}
+    />
+    Send privately
+  </label>
+</div>
 
         <div style={{ marginBottom: 18 }}>
           <label style={labelStyle}>Recipient's name</label>
