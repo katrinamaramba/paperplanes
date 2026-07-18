@@ -27,16 +27,20 @@ export default function Header() {
     <header style={{ background: '#FAF9F6', padding: '16px 20px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
   <Link
-    href="/"
-    style={{
-      fontFamily: 'var(--font-display)',
-      textDecoration: 'none',
-      color: 'var(--color-ink)',
-      fontSize: 18,
-    }}
-  >
-    PaperPlanes
-  </Link>
+  href="/"
+  style={{
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+    fontFamily: 'var(--font-display)',
+    textDecoration: 'none',
+    color: 'var(--color-ink)',
+    fontSize: 18,
+  }}
+>
+  <img src="/images/logo.png" alt="PaperPlanes" style={{ width: 24, height: 24 }} />
+  PaperPlanes
+</Link>
 
   <button
     className="hamburger-button"

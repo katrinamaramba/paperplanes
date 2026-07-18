@@ -17,7 +17,7 @@ export default async function LetterPage({ params }: { params: Promise<{ share_t
 
   return (
     <div style={{ maxWidth: 600, margin: '40px auto', padding: 20 }}>
-      <h1>A letter for {letter.recipient_name}</h1>
+      <h1 style={{ fontSize: 32 }}>A letter for {letter.recipient_name}</h1>
 
       {letter.is_public ? (
         letter.author_username && (
