@@ -5,10 +5,12 @@ import Link from 'next/link'
 import { useAuth } from '@/context/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 
 export default function Header() {
   const { user } = useAuth()
   const router = useRouter()
+  const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
 
   const handleLogout = async () => {
@@ -23,17 +25,24 @@ export default function Header() {
     fontSize: 17,
   }
 
+  const getLinkStyle = (href: string) => ({
+    textDecoration: 'none',
+    color: pathname === href ? 'var(--color-accent)' : 'var(--color-ink)',
+    fontWeight: pathname === href ? 600 : 400,
+    fontSize: 17,
+  })
+
   return (
     <header
-  style={{
-    background: '#FAF9F6',
-    padding: '16px 20px',
-    position: 'sticky',
-    top: 0,
-    zIndex: 50,
-  }}
->
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
+      style={{
+        background: '#FAF9F6',
+        padding: '16px 20px',
+        position: 'sticky',
+        top: 0,
+        zIndex: 50,
+      }}
+    >
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', width: '100%' }}>
         <Link
           href="/"
           style={{
@@ -58,17 +67,22 @@ export default function Header() {
             gap: 24,
             alignItems: 'center',
             fontSize: 17,
-            flex: 1,
-            justifyContent: 'center',
+            position: 'absolute',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '100%',
+            maxWidth: 600,
+            padding: '0 20px',
+            zIndex: 10,
           }}
         >
-          <Link href="/feed" style={linkStyle}>Feed</Link>
-          <Link href="/about" style={linkStyle}>About</Link>
-          {user && <Link href="/write" style={linkStyle}>Write a Letter</Link>}
-          {user && <Link href="/dashboard" style={linkStyle}>Dashboard</Link>}
+          <Link href="/feed" style={getLinkStyle('/feed')}>Feed</Link>
+          <Link href="/about" style={getLinkStyle('/about')}>About</Link>
+          {user && <Link href="/write" style={getLinkStyle('/write')}>Write a Letter</Link>}
+          {user && <Link href="/dashboard" style={getLinkStyle('/dashboard')}>Dashboard</Link>}
         </nav>
 
-        <div className="desktop-nav" style={{ flexShrink: 0 }}>
+        <div className="desktop-nav" style={{ flexShrink: 0, zIndex: 20 }}>
           {user ? (
             <button
               onClick={handleLogout}
@@ -106,6 +120,7 @@ export default function Header() {
             padding: 4,
             color: 'var(--color-ink)',
             flexShrink: 0,
+            zIndex: 20,
           }}
           aria-label="Menu"
         >
@@ -122,12 +137,12 @@ export default function Header() {
           className="mobile-menu-panel"
           style={{ display: 'flex', flexDirection: 'column', gap: 16, marginTop: 16, paddingTop: 16, borderTop: '1px solid var(--color-line)' }}
         >
-          <Link href="/feed" style={linkStyle} onClick={() => setMenuOpen(false)}>Feed</Link>
-          <Link href="/about" style={linkStyle} onClick={() => setMenuOpen(false)}>About</Link>
+          <Link href="/feed" style={getLinkStyle('/feed')} onClick={() => setMenuOpen(false)}>Feed</Link>
+          <Link href="/about" style={getLinkStyle('/about')} onClick={() => setMenuOpen(false)}>About</Link>
           {user ? (
             <>
-              <Link href="/write" style={linkStyle} onClick={() => setMenuOpen(false)}>Write a Letter</Link>
-              <Link href="/dashboard" style={linkStyle} onClick={() => setMenuOpen(false)}>Dashboard</Link>
+              <Link href="/write" style={getLinkStyle('/write')} onClick={() => setMenuOpen(false)}>Write a Letter</Link>
+              <Link href="/dashboard" style={getLinkStyle('/dashboard')} onClick={() => setMenuOpen(false)}>Dashboard</Link>
               <button
                 onClick={handleLogout}
                 style={{ cursor: 'pointer', background: 'none', border: '1px solid var(--color-line)', borderRadius: 6, padding: '8px 14px', fontFamily: 'var(--font-ui)', fontSize: 14, color: 'var(--color-ink-soft)', textAlign: 'left' }}

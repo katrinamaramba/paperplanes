@@ -42,19 +42,15 @@ export default function WriteLetter() {
   const router = useRouter()
 
   useEffect(() => {
-    if (authLoading) return
-    if (!user) {
-      router.push('/login')
-    }
-  }, [user, authLoading])
+  if (!authLoading && !user) {
+    setIsPublic(false)
+  }
+}, [user, authLoading])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!user) {
-      router.push('/login')
-      return
-    }
+
 
     setLoading(true)
     setIsFlying(true) // Start the flight animation
@@ -65,7 +61,7 @@ export default function WriteLetter() {
       .from('letters')
       .insert([
         {
-          author_id: user.id,
+          author_id: user?.id ?? null,
           recipient_name: recipientName,
           recipient_email: isPublic ? null : recipientEmail,
           sender_name: isPublic ? null : senderName,
@@ -103,24 +99,42 @@ export default function WriteLetter() {
     router.push(`/letter/${shareToken}`)
   }
 
-  if (authLoading || !user) {
-    return <p style={{ padding: 20 }}>Loading...</p>
-  }
+  if (authLoading) {
+  return <p style={{ padding: 20 }}>Loading...</p>
+}
+
 
   return (
     <div style={{ maxWidth: 600, margin: '40px auto', padding: 20 }}>
       <h1 style={{ fontSize: 32 }}>Write a Letter</h1>
 
       <form onSubmit={handleSubmit} className="letter-card" style={{ padding: 28, marginTop: 20 }}>
+        {!user && (
+  <div style={{
+    background: 'var(--color-paper)',
+    border: '1px solid var(--color-line)',
+    borderRadius: 8,
+    padding: 14,
+    marginBottom: 20,
+    fontSize: 14,
+    color: 'var(--color-ink-soft)',
+  }}>
+    Writing as a guest — your letter will be sent privately.{' '}
+<a href="/login" style={{ color: 'var(--color-accent)' }}>Sign in</a>{' '}
+to also write letters publicly and save everything you send to a dashboard.
+  </div>
+)}
         <div className="public-private-choice" style={{ marginBottom: 20, display: 'flex', gap: 16, alignItems: 'center' }}>
-  <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-    <input
-      type="radio"
-      checked={isPublic}
-      onChange={() => setIsPublic(true)}
-    />
-    Share publicly
-  </label>
+  {user && (
+    <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+      <input
+        type="radio"
+        checked={isPublic}
+        onChange={() => setIsPublic(true)}
+      />
+      Share publicly
+    </label>
+  )}
   <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
     <input
       type="radio"
