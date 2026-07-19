@@ -10,7 +10,7 @@ export async function POST(request: Request) {
 
   try {
     await resend.emails.send({
-      from: 'PaperPlanes <onboarding@resend.dev>',
+      from: 'PaperPlanes <letters@paperplanes.ink>',
       to: recipientEmail,
       subject: `${senderName} sent you a letter on PaperPlanes`,
       html: `
