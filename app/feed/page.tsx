@@ -30,7 +30,7 @@ export default async function Feed({
   }
 
   return (
-    <div style={{ maxWidth: 700, margin: '40px auto', padding: 20 }}>
+    <div className="page-container" style={{ maxWidth: 700, margin: '0 auto', padding: 20 }}>
       <h1 style={{ fontSize: 32 }}>Letters from the Community</h1>
       <p style={{ color: 'var(--color-ink-soft)', fontSize: 16, fontFamily: 'var(--font-instrument)', marginTop: -8, marginBottom: 24 }}>
         {totalCount ?? 0} letter{totalCount === 1 ? '' : 's'} shared so far
@@ -62,24 +62,24 @@ export default async function Feed({
       {letters.length === 0 && <p>No letters found.</p>}
 
       {letters.map((letter) => (
-  <Link
-    key={letter.id}
-    href={`/letter/${letter.share_token}`}
-    className="letter-card"
-    style={{
-      display: 'block',
-      padding: 20,
-      marginBottom: 16,
-      textDecoration: 'none',
-      color: 'inherit',
-    }}
-  >
-    <h3 style={{ fontSize: 22, margin: 0 }}>A letter for {letter.recipient_name}</h3>
-    <p style={{ color: 'var(--color-ink-soft)', fontSize: 16, marginTop: 6, marginBottom: 0 }}>
-      by {letter.profiles?.username}
-    </p>
-  </Link>
-))}
+        <Link
+          key={letter.id}
+          href={`/letter/${letter.share_token}`}
+          className="letter-card"
+          style={{
+            display: 'block',
+            padding: 20,
+            marginBottom: 16,
+            textDecoration: 'none',
+            color: 'inherit',
+          }}
+        >
+          <h3 style={{ fontSize: 22, margin: 0 }}>A letter for {letter.recipient_name}</h3>
+          <p style={{ color: 'var(--color-ink-soft)', fontSize: 16, marginTop: 6, marginBottom: 0 }}>
+            by {letter.profiles?.username}
+          </p>
+        </Link>
+      ))}
     </div>
   )
 }

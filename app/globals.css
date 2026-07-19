@@ -119,7 +119,7 @@ button {
   /* Tighten default page containers on mobile */
   .page-container {
     padding: 16px !important;
-    margin-top: 24px !important;
+    margin-top: 32px !important;
   }
 
   /* Stack hero buttons vertically */

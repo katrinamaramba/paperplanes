@@ -145,7 +145,7 @@ export default function Header() {
               <Link href="/dashboard" style={getLinkStyle('/dashboard')} onClick={() => setMenuOpen(false)}>Dashboard</Link>
               <button
                 onClick={handleLogout}
-                style={{ cursor: 'pointer', background: 'none', border: '1px solid var(--color-line)', borderRadius: 6, padding: '8px 14px', fontFamily: 'var(--font-ui)', fontSize: 14, color: 'var(--color-ink-soft)', textAlign: 'left' }}
+                style={{ cursor: 'pointer', background: 'var(--color-accent)', border: '1px solid var(--color-line)', borderRadius: 6, padding: '8px 14px', fontFamily: 'var(--font-ui)', fontSize: 14, color: 'var(--color-ink-soft)', textAlign: 'left' }}
               >
                 Log Out
               </button>
