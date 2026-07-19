@@ -16,7 +16,7 @@ export default function Footer() {
       <div style={{ display: 'flex', justifyContent: 'center', gap: 24, marginBottom: 12 }}>
         
         <a
-          href="https://ko-fi.com/yourusername"
+          href="https://ko-fi.com/petalzeeora"
           target="_blank"
           rel="noopener noreferrer"
           style={{ color: 'var(--color-ink-soft)', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none' }}
