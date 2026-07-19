@@ -8,6 +8,7 @@ export default function Terms() {
         <h2 style={{ fontSize: 20, fontWeight: 600, marginTop: 40 }}>Terms of Submission</h2>
 
         <p>By submitting a letter, you acknowledge and agree that:</p>
+        <br />
 
         <h3>1. What happens to your submission</h3>
         <p>
@@ -17,6 +18,7 @@ export default function Terms() {
           unique link. We do our best to keep the site running reliably, but we don't
           guarantee uninterrupted access.
         </p>
+        <br />
 
         <h3>2. Deleting your letters</h3>
         <p>
@@ -24,6 +26,7 @@ export default function Terms() {
           delete any letter you've written at any time from your dashboard, and it will be
           permanently removed from public view and our database.
         </p>
+        <br />
 
         <h3>3. You own what you write, and you confirm you have the right to submit it</h3>
         <p>
@@ -31,6 +34,7 @@ export default function Terms() {
           the right to submit the content you post, and that doing so doesn't infringe on
           anyone else's rights.
         </p>
+        <br />
 
         <h3>4. License you grant us</h3>
         <p>
@@ -39,7 +43,19 @@ export default function Terms() {
           long as it remains posted, solely for the purpose of operating the site (for
           example, showing it on the feed or emailing it to a private recipient). This
           license ends when you delete the letter.
+        <p>
+            <br />
+        You acknowledge that public letters may be shared, screenshotted, 
+        or repurposed by third parties, and PaperPlanes holds no liability 
+        for how outside users interact with your public submissions.
         </p>
+        <br />
+        <p>
+        For private letters, we only claim the license necessary to 
+        operate the site and deliver the content to your intended recipient.
+        </p>
+        </p>
+        <br />
 
         <h3>5. Content you may not submit</h3>
         <p>Your submissions must not contain:</p>
@@ -54,27 +70,33 @@ export default function Terms() {
           notice.
         </p>
 
+        <br />
+
         <h3>6. Content is the submitter's responsibility</h3>
         <p>
-          We don't review every letter before it's posted. Content reflects the views of
-          whoever wrote it, not PaperPlanes, and we aren't responsible for it. If you
-          believe a letter violates these guidelines, contact us through the footer links.
+          Content reflects the views of whoever wrote it, not PaperPlanes,
+          and we are not legally responsible for any user submissions.
+          By using this platform, you agree to indemnify and hold PaperPlanes 
+          harmless from any claims, damages, or lawsuits arising from the letters you submit.
         </p>
 
         <h2 style={{ fontSize: 20, fontWeight: 600, marginTop: 40 }}>Terms of Use</h2>
+        <br />
 
         <h3>1. Who may use PaperPlanes</h3>
         <p>
           By using PaperPlanes, you agree to these terms. You must be able to legally
           consent to these terms in your country to use the site.
         </p>
+        <br />
 
         <h3>2. Your account</h3>
         <p>
-          You sign in using your Google account — this creates your PaperPlanes account
-          automatically on first login. You're responsible for keeping your Google account
-          secure, since that's what protects access to PaperPlanes.
+          You sign in using your Google account, which creates your PaperPlanes account 
+          automatically on your first login. You are solely responsible for keeping your
+          Google account secure to protect access to your PaperPlanes dashboard.
         </p>
+        <br />
 
         <h3>3. Your username</h3>
         <p>
@@ -82,6 +104,7 @@ export default function Terms() {
           publicly on letters you share; your real name and email are never shown
           publicly.
         </p>
+        <br />
 
         <h3>4. Acceptable use</h3>
         <p>
@@ -90,6 +113,7 @@ export default function Terms() {
           operation (for example, scraping content or attempting unauthorized access). We
           reserve the right to suspend or remove accounts that violate this.
         </p>
+        <br />
 
         <h3>5. No warranty</h3>
         <p>
@@ -97,6 +121,7 @@ export default function Terms() {
           for any damages arising from your use of the site, to the extent permitted by
           law.
         </p>
+        <br />
 
         <h3>6. Changes to these terms</h3>
         <p>
@@ -104,6 +129,7 @@ export default function Terms() {
           means you accept the updated terms. Material changes will be reflected by an
           updated "Last updated" date above.
         </p>
+        <br />
 
         <h3>7. Ending your use</h3>
         <p>
@@ -112,6 +138,7 @@ export default function Terms() {
         </p>
 
         <h2 style={{ fontSize: 20, fontWeight: 600, marginTop: 40 }}>Privacy Policy</h2>
+        <br />
 
         <h3>1. What we collect</h3>
         <p>
@@ -121,6 +148,7 @@ export default function Terms() {
           recipient email addresses and the pen name you choose to sign with. We don't
           collect payment information, phone numbers, or physical addresses.
         </p>
+        <br />
 
         <h3>2. How we use it</h3>
         <p>
@@ -129,6 +157,7 @@ export default function Terms() {
           private letter links to the recipients you specify. We don't use your data for
           advertising or sell it to third parties.
         </p>
+        <br />
 
         <h3>3. Third-party services we use</h3>
         <p>
@@ -138,6 +167,7 @@ export default function Terms() {
           letters. Each of these providers processes data on our behalf and maintains
           their own security and privacy practices.
         </p>
+        <br />
 
         <h3>4. Data retention</h3>
         <p>
@@ -146,6 +176,7 @@ export default function Terms() {
           removes it. To request full account deletion, contact us through the footer
           links.
         </p>
+        <br />
 
        <h3>5. Your rights</h3>
         <p>
@@ -153,12 +184,14 @@ export default function Terms() {
           dashboard. You may request a copy of your data or full account deletion by
           contacting us.
         </p>
+        <br />
 
         <h3>6. Children's privacy</h3>
         <p>
           PaperPlanes is not directed at children. We don't knowingly collect data from
           anyone under the age required to consent to these terms in their jurisdiction.
         </p>
+        <br />
 
         <h3>7. Changes to this policy</h3>
         <p>
