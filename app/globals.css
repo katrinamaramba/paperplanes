@@ -80,7 +80,7 @@ button {
 }
 
 /* Mobile adjustments */
-@media (max-width: 640px) {
+@media (max-width: 900px) {
 
   header nav {
     justify-content: center !important;
@@ -156,7 +156,7 @@ button {
   display: none;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 900px) {
   .mobile-menu-panel {
     display: flex !important;
   }
