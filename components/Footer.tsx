@@ -28,7 +28,7 @@ export default function Footer() {
         </a>
 
         <a
-          href="https://instagram.com/paula_kat16"
+          href="https://instagram.com/thepaperplanes2026"
           target="_blank"
           rel="noopener noreferrer"
           style={{ color: 'var(--color-ink-soft)', display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none' }}
