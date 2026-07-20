@@ -1,10 +1,31 @@
 import { Resend } from 'resend'
 import { NextResponse } from 'next/server'
+import { supabase } from '@/lib/supabase'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
+const DAILY_LIMIT = 2
 
 export async function POST(request: Request) {
-  const { recipientEmail, recipientName, senderName, shareToken } = await request.json()
+  const { recipientEmail, recipientName, senderName, shareToken, userId } = await request.json()
+
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown'
+  const identifier = userId ? `user:${userId}` : `ip:${ip}`
+
+  const startOfDay = new Date()
+  startOfDay.setHours(0, 0, 0, 0)
+
+  const { count } = await supabase
+    .from('email_send_log')
+    .select('*', { count: 'exact', head: true })
+    .eq('identifier', identifier)
+    .gte('sent_at', startOfDay.toISOString())
+
+  if ((count ?? 0) >= DAILY_LIMIT) {
+    return NextResponse.json(
+      { success: false, error: 'Youve reached todays limit of 2 private letters. Try again tomorrow.' },
+      { status: 429 }
+    )
+  }
 
   const letterUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/letter/${shareToken}`
 
@@ -21,33 +42,30 @@ export async function POST(request: Request) {
                 <p style="font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: #6B6558; margin: 0 0 24px 0;">
                   PaperPlanes
                 </p>
-
                 <h1 style="font-size: 22px; color: #2E2A26; margin: 0 0 16px 0; font-weight: normal;">
                   A letter has arrived for you, ${recipientName}.
                 </h1>
-
                 <p style="font-size: 15px; line-height: 1.6; color: #2E2A26; margin: 0 0 32px 0;">
                   ${senderName} wrote you something. Some things are better read than told —
                   open it when you have a quiet moment.
                 </p>
-
                 <a href="${letterUrl}" style="display: inline-block; padding: 14px 28px; background-color: #8B3A3A; color: #ffffff; text-decoration: none; border-radius: 6px; font-size: 15px;">
                   Read your letter
                 </a>
-
                 <p style="font-size: 12px; color: #6B6558; margin: 32px 0 0 0;">
                   This letter was sent privately, just for you.
                 </p>
               </td>
             </tr>
           </table>
-
           <p style="text-align: center; font-size: 12px; color: #6B6558; margin-top: 24px;">
             PaperPlanes — Letters worth sending.
           </p>
         </div>
       `,
     })
+
+    await supabase.from('email_send_log').insert([{ identifier }])
 
     return NextResponse.json({ success: true })
   } catch (error) {

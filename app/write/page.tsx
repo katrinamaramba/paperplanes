@@ -81,17 +81,24 @@ export default function WriteLetter() {
     }
 
     if (!isPublic) {
-      await fetch('/api/send-letter', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          recipientEmail,
-          recipientName,
-          senderName,
-          shareToken,
-        }),
-      })
-    }
+  const res = await fetch('/api/send-letter', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      recipientEmail,
+      recipientName,
+      senderName,
+      shareToken,
+      userId: user?.id ?? null,
+    }),
+  })
+
+  if (!res.ok) {
+    const result = await res.json()
+    alert(result.error || 'Something went wrong sending the email. Youve reached todays limit of 2 private letters. Try again tomorrow.')
+    return
+  }
+}
 
     // Wait for the animation to finish before routing (matching animation duration)
     await new Promise(resolve => setTimeout(resolve, 1500)); 
