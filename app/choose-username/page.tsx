@@ -59,8 +59,8 @@ export default function ChooseUsername() {
   }
 
   return (
-    <div style={{ maxWidth: 440, margin: '80px auto', padding: 20 }}>
-      <h1 style={{ textAlign: 'center' }}>Choose a username</h1>
+    <div style={{ maxWidth: 400, margin: '80px auto', padding: 20 }}>
+      <h1 style={{ textAlign: 'center', fontSize: 32 }}>Choose a username</h1>
 
       <div className="letter-card" style={{ padding: 32, marginTop: 20 }}>
         <p style={{ color: 'var(--color-ink-soft)', marginTop: 0, marginBottom: 20, textAlign: 'center' }}>
@@ -74,7 +74,7 @@ export default function ChooseUsername() {
             onChange={(e) => setUsername(e.target.value)}
             required
             minLength={3}
-            placeholder="e.g. yourname"
+            placeholder="e.g. yourname or nickname"
             style={{
               width: '100%',
               padding: 10,
