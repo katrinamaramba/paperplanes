@@ -7,14 +7,34 @@ export default function Home() {
       style={{
         maxWidth: 700,
         margin: '0 auto',
-        padding: 20,
+        padding: '20px 20px',
         textAlign: 'center',
-        minHeight: 'calc(100vh - 140px)',
+        minHeight: 'calc(90vh - 140px)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
       }}
     >
+      <style>{`
+        @keyframes hover-fly {
+          0% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-12px) rotate(4deg); }
+          100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .drift-plane {
+          animation: hover-fly 3s ease-in-out infinite;
+        }
+      `}</style>
+      
+      <div style={{ position: 'relative', height: 100, marginBottom: 16, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <img
+          src="/images/logo.png"
+          alt="Paper plane"
+          className="drift-plane"
+          style={{ width: 80, height: 80 }}
+        />
+      </div>
+
       <h1 style={{ fontSize: 56, marginBottom: 20 }}>PaperPlanes</h1>
       <p style={{ fontSize: 18, color: 'var(--color-ink-soft)', marginBottom: 40, lineHeight: 1.6 }}>
         Write a letter to someone you love. Share it just with them,
