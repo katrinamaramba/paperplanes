@@ -65,7 +65,7 @@ export default function Dashboard() {
   if (authLoading || checking) return <p style={{ padding: 20 }}>Loading...</p>
 
   return (
-    <div style={{ maxWidth: 700, margin: '40px auto', padding: 20 }}>
+    <div style={{ maxWidth: 700, margin: '0 auto', padding: 20 }}>
       <h1 style={{ fontSize: 32 }}>Welcome, {profile?.username}</h1>
 
       <h2 style={{ fontSize: 24 }}>Your Letters</h2>

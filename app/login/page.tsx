@@ -13,8 +13,8 @@ export default function Login() {
   }
 
   return (
-    <div style={{ maxWidth: 440, margin: '80px auto', padding: 20 }}>
-      <h1 style={{ textAlign: 'center' }}>Welcome to PaperPlanes</h1>
+    <div style={{ maxWidth: 400, margin: '80px auto', padding: 20 }}>
+      <h1 style={{ textAlign: 'center', fontSize: 30 }}>Welcome to PaperPlanes</h1>
 
       <div className="letter-card" style={{ padding: 32, marginTop: 20, textAlign: 'center' }}>
         <p style={{ color: 'var(--color-ink-soft)', marginTop: 0, marginBottom: 8, fontSize: 15 }}>
