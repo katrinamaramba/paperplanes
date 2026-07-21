@@ -30,6 +30,9 @@ export default async function LetterPage({ params }: { params: Promise<{ share_t
         >
           {letter.is_public ? letter.author_username : letter.sender_name}
         </p>
+        <p style={{ textAlign: 'right', fontSize: 13, color: 'var(--color-ink-soft)', marginTop: 4, marginBottom: 0 }}>
+          {new Date(letter.created_at).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
+        </p>
       </div>
 
       {letter.is_public && (

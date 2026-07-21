@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/context/AuthContext'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function Dashboard() {
   const { user, loading: authLoading } = useAuth()
@@ -93,29 +94,31 @@ export default function Dashboard() {
       )}
 
       {letters.map((letter) => (
-        <div key={letter.id} className="letter-card" style={{ padding: 20, marginBottom: 16 }}>
-          <p style={{ marginTop: 0 }}><strong>To:</strong> {letter.recipient_name}</p>
-          <p style={{ color: 'var(--color-ink-soft)' }}>{letter.content.slice(0, 100)}...</p>
-          <p style={{ fontSize: 12, color: 'var(--color-ink-soft)' }}>
-            by {letter.profiles?.username} · {letter.is_public ? 'Public' : 'Private'}
-          </p>
-          <div style={{ marginTop: 8 }}>
-            <button
-              onClick={() => handleDelete(letter.id)}
-              style={{
-                fontSize: 14,
-                cursor: 'pointer',
-                color: 'var(--color-accent)',
-                background: 'none',
-                border: 'none',
-                padding: 0,
-              }}
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-      ))}
+  <div key={letter.id} className="letter-card" style={{ padding: 20, marginBottom: 16 }}>
+    <Link href={`/dashboard/letter/${letter.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+      <p style={{ marginTop: 0 }}><strong>To:</strong> {letter.recipient_name}</p>
+      <p style={{ color: 'var(--color-ink-soft)' }}>{letter.content.slice(0, 100)}...</p>
+      <p style={{ fontSize: 12, color: 'var(--color-ink-soft)' }}>
+        by {letter.profiles?.username} · {letter.is_public ? 'Public' : 'Private'}
+      </p>
+    </Link>
+    <div style={{ marginTop: 8 }}>
+      <button
+        onClick={() => handleDelete(letter.id)}
+        style={{
+          fontSize: 14,
+          cursor: 'pointer',
+          color: 'var(--color-accent)',
+          background: 'none',
+          border: 'none',
+          padding: 0,
+        }}
+      >
+        Delete
+      </button>
+    </div>
+  </div>
+))}
     </div>
   )
 }

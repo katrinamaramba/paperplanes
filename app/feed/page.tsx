@@ -9,9 +9,11 @@ export default async function Feed({
   const { q } = await searchParams
 
   const { count: totalCount } = await supabase
-    .from('letters')
-    .select('*', { count: 'exact', head: true })
-    .eq('is_public', true)
+  .from('letters')
+  .select('*', { count: 'exact', head: true })
+  .eq('is_public', true)
+
+const { data: privateCount } = await supabase.rpc('get_private_letter_count')
 
   let query = supabase
     .from('letters')
@@ -28,13 +30,13 @@ export default async function Feed({
   if (error) {
     return <div>Something went wrong loading letters.</div>
   }
-
+                                                                       
   return (
     <div className="page-container" style={{ maxWidth: 700, margin: '0 auto', padding: 20 }}>
       <h1 style={{ fontSize: 32 }}>Letters from the Community</h1>
       <p style={{ color: 'var(--color-ink-soft)', fontSize: 16, fontFamily: 'var(--font-instrument)', marginTop: -8, marginBottom: 24 }}>
-        {totalCount ?? 0} letter{totalCount === 1 ? '' : 's'} shared so far
-      </p>
+  {totalCount ?? 0} letter{totalCount === 1 ? '' : 's'} shared publicly · {privateCount ?? 0} sent privately
+</p>
 
       <form style={{ marginBottom: 24 }}>
         <input
@@ -62,24 +64,27 @@ export default async function Feed({
       {letters.length === 0 && <p>No letters found.</p>}
 
       {letters.map((letter) => (
-        <Link
-          key={letter.id}
-          href={`/letter/${letter.share_token}`}
-          className="letter-card"
-          style={{
-            display: 'block',
-            padding: 20,
-            marginBottom: 16,
-            textDecoration: 'none',
-            color: 'inherit',
-          }}
-        >
-          <h3 style={{ fontSize: 22, margin: 0 }}>A letter for {letter.recipient_name}</h3>
-          <p style={{ color: 'var(--color-ink-soft)', fontSize: 16, marginTop: 6, marginBottom: 0 }}>
-            by {letter.profiles?.username}
-          </p>
-        </Link>
-      ))}
+  <Link
+    key={letter.id}
+    href={`/letter/${letter.share_token}`}
+    className="letter-card"
+    style={{
+      display: 'block',
+      padding: 20,
+      marginBottom: 16,
+      textDecoration: 'none',
+      color: 'inherit',
+    }}
+  >
+    <h3 style={{ fontSize: 22, margin: 0 }}>A letter for {letter.recipient_name}</h3>
+    <p style={{ color: 'var(--color-ink-soft)', fontSize: 16, marginTop: 6, marginBottom: 0 }}>
+      by {letter.profiles?.username}
+    </p>
+    <p style={{ color: 'var(--color-ink-soft)', fontSize: 13, marginTop: 4, marginBottom: 0 }}>
+      {new Date(letter.created_at).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
+    </p>
+  </Link>
+))}
     </div>
   )
 }
