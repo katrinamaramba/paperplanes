@@ -22,7 +22,7 @@ export default function Login() {
         </p>
 
         <p style={{ color: 'var(--color-ink-soft)', marginBottom: 28, fontSize: 14, lineHeight: 1.6 }}>
-          Signing in saves every letter you write or receive to your
+          Signing in saves every letter you write to your
           dashboard, so nothing gets lost — public or private.
         </p>
 

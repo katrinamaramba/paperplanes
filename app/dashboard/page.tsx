@@ -95,7 +95,7 @@ export default function Dashboard() {
 
       {letters.map((letter) => (
   <div key={letter.id} className="letter-card" style={{ padding: 20, marginBottom: 16 }}>
-    <Link href={`/dashboard/letter/${letter.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+    <Link href={`/letter/${letter.share_token}`} style={{ textDecoration: 'none', color: 'inherit' }}>
       <p style={{ marginTop: 0 }}><strong>To:</strong> {letter.recipient_name}</p>
       <p style={{ color: 'var(--color-ink-soft)' }}>{letter.content.slice(0, 100)}...</p>
       <p style={{ fontSize: 12, color: 'var(--color-ink-soft)' }}>
