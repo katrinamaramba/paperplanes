@@ -1,4 +1,13 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Learn the story behind PaperPlanes and why it was created.",
+};
+
 export default function About() {
+
   return (
     <div style={{ maxWidth: 600, margin: '0 auto', padding: 20 }}>
       <h1 style={{ fontSize: 32 }}>Why PaperPlanes?</h1>

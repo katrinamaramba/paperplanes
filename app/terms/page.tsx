@@ -1,3 +1,8 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms of Service",
+};
 export default function Terms() {
   return (
     <div className="page-container" style={{ maxWidth: 750, margin: '60px auto', padding: 20 }}>
