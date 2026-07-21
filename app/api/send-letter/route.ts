@@ -46,8 +46,7 @@ export async function POST(request: Request) {
                   A letter has arrived for you, ${recipientName}.
                 </h1>
                 <p style="font-size: 15px; line-height: 1.6; color: #2E2A26; margin: 0 0 32px 0;">
-                  ${senderName} wrote you something. Some things are better read than told —
-                  open it when you have a quiet moment.
+                  ${senderName} folded their thoughts into a letter just for you. so take a look whenever you have a spare moment.
                 </p>
                 <a href="${letterUrl}" style="display: inline-block; padding: 14px 28px; background-color: #8B3A3A; color: #ffffff; text-decoration: none; border-radius: 6px; font-size: 15px;">
                   Read your letter
