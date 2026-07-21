@@ -1,3 +1,4 @@
+import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import {
   Fraunces,
@@ -135,6 +136,9 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
         </AuthProvider>
+        <GoogleAnalytics
+  gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID!}
+/>
       </body>
     </html>
   );
