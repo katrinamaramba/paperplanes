@@ -23,6 +23,7 @@ export default function Header() {
     textDecoration: 'none',
     color: 'var(--color-ink)',
     fontSize: 17,
+    lineHeight: 1,
   }
 
   const getLinkStyle = (href: string) => ({
@@ -64,6 +65,7 @@ export default function Header() {
           className="desktop-nav"
           style={{
             display: 'flex',
+            justifyContent: 'center',
             gap: 24,
             alignItems: 'center',
             fontSize: 17,
