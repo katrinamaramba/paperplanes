@@ -112,7 +112,7 @@ export default function WriteLetter() {
 
 
   return (
-    <div style={{ maxWidth: 600, margin: '40px auto', padding: 20 }}>
+    <div style={{ maxWidth: 700, margin: '40px auto', padding: 20 }}>
       <h1 style={{ fontSize: 32 }}>Write a Letter</h1>
 
       <form onSubmit={handleSubmit} className="letter-card" style={{ padding: 28, marginTop: 20 }}>

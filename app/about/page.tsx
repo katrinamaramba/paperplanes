@@ -1,6 +1,6 @@
 export default function About() {
   return (
-    <div style={{ maxWidth: 700, margin: '0 auto', padding: 20 }}>
+    <div style={{ maxWidth: 700, margin: '40px auto', padding: 20 }}>
       <h1 style={{ fontSize: 32 }}>Why PaperPlanes?</h1>
 
       <div className="letter-card" style={{ padding: 32, marginTop: 20, }}>
