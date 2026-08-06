@@ -77,6 +77,46 @@ button {
   box-shadow: -2px 2px 3px rgba(46, 42, 38, 0.12);
 }
 
+/* Homepage hero entrance animation */
+.wax-seal {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4px;
+  animation: seal-appear 0.8s ease-out both;
+}
+
+@keyframes seal-appear {
+  0% { opacity: 0; transform: scale(0.7) rotate(-8deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+.hero-title {
+  opacity: 0;
+  animation: hero-rise 0.7s ease-out 0.15s forwards;
+}
+
+.hero-item {
+  opacity: 0;
+  animation: hero-rise 0.7s ease-out forwards;
+}
+
+.hero-actions.hero-item {
+  animation-delay: 0.45s;
+}
+
+p.hero-item {
+  animation-delay: 0.3s;
+}
+
+a.hero-item {
+  animation-delay: 0.6s;
+}
+
+@keyframes hero-rise {
+  0% { opacity: 0; transform: translateY(14px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
 /* Mobile adjustments */
 @media (max-width: 900px) {
 
