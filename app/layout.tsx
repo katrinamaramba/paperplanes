@@ -1,5 +1,6 @@
 import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
+import PageTransition from '@/components/PageTransition';
 import {
   Fraunces,
   Courier_Prime,
@@ -132,10 +133,12 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <AuthProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </AuthProvider>
+  <Header />
+  <main style={{ flex: 1 }}>
+    <PageTransition>{children}</PageTransition>
+  </main>
+  <Footer />
+</AuthProvider>
         <GoogleAnalytics
   gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID!}
 />
