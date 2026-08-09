@@ -19,7 +19,7 @@ export default function MaintenancePage() {
             marginBottom: "24px",
           }}
         >
-          ✈️
+          
         </div>
 
         <h1
