@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const isMaintenanceMode =
     process.env.MAINTENANCE_MODE === "true";
 
@@ -24,7 +24,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Redirect everything else to maintenance
+  // Show maintenance page without changing the URL
   const maintenanceUrl = request.nextUrl.clone();
   maintenanceUrl.pathname = "/maintenance";
 
@@ -32,7 +32,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico).*)",
-  ],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };
