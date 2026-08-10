@@ -296,6 +296,10 @@ a.hero-item {
   overflow: hidden;
 }
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* Envelope-style feed cards */
 .envelope-card {
   position: relative;

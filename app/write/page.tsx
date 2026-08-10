@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -41,6 +41,7 @@ export default function WriteLetter() {
   const [isPublic, setIsPublic] = useState(false)
   const [loading, setLoading] = useState(false)
   const [isFlying, setIsFlying] = useState(false)
+  const isSubmittingRef = useRef(false)
   const router = useRouter()
 
   // If someone logs out mid-session while this was set to public, snap it back to private.
@@ -52,6 +53,12 @@ export default function WriteLetter() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Blocks duplicate submissions instantly, before React even has a chance
+    // to re-render and disable the button. Rapid double/triple clicks land
+    // here on the very first line, no matter how fast they happen.
+    if (isSubmittingRef.current) return
+    isSubmittingRef.current = true
 
     // Never trust client state alone for something the database enforces.
     // A guest (no user) can only ever submit privately, full stop.
@@ -82,6 +89,7 @@ export default function WriteLetter() {
     setIsFlying(false)
 
     if (error) {
+      isSubmittingRef.current = false
       if (error.code === '42501' || error.message?.toLowerCase().includes('row-level security')) {
         alert('Sharing a letter publicly requires an account. Please sign in and try again — your letter was not sent.')
       } else {
@@ -104,6 +112,7 @@ export default function WriteLetter() {
       })
 
       if (!res.ok) {
+        isSubmittingRef.current = false
         const result = await res.json()
         alert(result.error || "Something went wrong sending the email. You've reached today's limit of 2 private letters. Try again tomorrow.")
         return
@@ -226,16 +235,30 @@ export default function WriteLetter() {
         <button
           type="submit"
           disabled={loading || isFlying}
+          style={{ pointerEvents: (loading || isFlying) ? 'none' : 'auto' }}
           className={`
             px-7 py-3 bg-[var(--color-accent)] text-white text-[15px] rounded-lg cursor-pointer
             flex items-center justify-between gap-3 transition-all duration-300 shadow-md
             hover:shadow-lg hover:scale-105 active:scale-95
-            disabled:opacity-70 disabled:cursor-not-allowed
+            disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100
             ${isFlying ? 'border-2 border-[var(--color-line)] bg-opacity-80 shadow-inner' : ''}
           `}
         >
-          <span className="flex-1 text-left">
-            {loading ? 'Sending...' : 'Send Letter'}
+          <span className="flex-1 text-left flex items-center gap-2">
+            {loading && (
+              <span
+                style={{
+                  width: 14,
+                  height: 14,
+                  border: '2px solid rgba(255,255,255,0.4)',
+                  borderTopColor: '#fff',
+                  borderRadius: '50%',
+                  display: 'inline-block',
+                  animation: 'spin 0.7s linear infinite',
+                }}
+              />
+            )}
+            {loading ? 'Sending your letter...' : 'Send Letter'}
           </span>
           <div className="w-8 h-8 flex items-center justify-center relative">
             <Image
