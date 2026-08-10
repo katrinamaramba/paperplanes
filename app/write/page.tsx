@@ -119,7 +119,7 @@ export default function WriteLetter() {
       }
     }
 
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    await new Promise(resolve => setTimeout(resolve, 300))
 
     router.push(`/letter/${shareToken}`)
   }
