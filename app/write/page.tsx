@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Image from 'next/image' // Import the Next.js Image component
+import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
@@ -36,24 +36,29 @@ export default function WriteLetter() {
   const [recipientEmail, setRecipientEmail] = useState('')
   const [content, setContent] = useState('')
   const [senderName, setSenderName] = useState('')
-  const [isPublic, setIsPublic] = useState(true)
+  // Default to false (private) always. Only a logged-in user can ever flip this,
+  // since the public radio button below only renders when `user` exists.
+  const [isPublic, setIsPublic] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [isFlying, setIsFlying] = useState(false) // New state for animation
+  const [isFlying, setIsFlying] = useState(false)
   const router = useRouter()
 
+  // If someone logs out mid-session while this was set to public, snap it back to private.
   useEffect(() => {
-  if (!authLoading && !user) {
-    setIsPublic(false)
-  }
-}, [user, authLoading])
+    if (!authLoading && !user && isPublic) {
+      setIsPublic(false)
+    }
+  }, [user, authLoading])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-
+    // Never trust client state alone for something the database enforces.
+    // A guest (no user) can only ever submit privately, full stop.
+    const effectivePublic = isPublic && !!user
 
     setLoading(true)
-    setIsFlying(true) // Start the flight animation
+    setIsFlying(true)
 
     const shareToken = crypto.randomUUID()
 
@@ -63,10 +68,10 @@ export default function WriteLetter() {
         {
           author_id: user?.id ?? null,
           recipient_name: recipientName,
-          recipient_email: isPublic ? null : recipientEmail,
-          sender_name: isPublic ? null : senderName,
+          recipient_email: effectivePublic ? null : recipientEmail,
+          sender_name: effectivePublic ? null : senderName,
           content: content,
-          is_public: isPublic,
+          is_public: effectivePublic,
           share_token: shareToken,
         },
       ])
@@ -74,42 +79,45 @@ export default function WriteLetter() {
       .single()
 
     setLoading(false)
+    setIsFlying(false)
 
     if (error) {
-      alert('Something went wrong: ' + error.message)
+      if (error.code === '42501' || error.message?.toLowerCase().includes('row-level security')) {
+        alert('Sharing a letter publicly requires an account. Please sign in and try again — your letter was not sent.')
+      } else {
+        alert('Something went wrong: ' + error.message)
+      }
       return
     }
 
-    if (!isPublic) {
-  const res = await fetch('/api/send-letter', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      recipientEmail,
-      recipientName,
-      senderName,
-      shareToken,
-      userId: user?.id ?? null,
-    }),
-  })
+    if (!effectivePublic) {
+      const res = await fetch('/api/send-letter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          recipientEmail,
+          recipientName,
+          senderName,
+          shareToken,
+          userId: user?.id ?? null,
+        }),
+      })
 
-  if (!res.ok) {
-    const result = await res.json()
-    alert(result.error || 'Something went wrong sending the email. Youve reached todays limit of 2 private letters. Try again tomorrow.')
-    return
-  }
-}
+      if (!res.ok) {
+        const result = await res.json()
+        alert(result.error || "Something went wrong sending the email. You've reached today's limit of 2 private letters. Try again tomorrow.")
+        return
+      }
+    }
 
-    // Wait for the animation to finish before routing (matching animation duration)
-    await new Promise(resolve => setTimeout(resolve, 1500)); 
+    await new Promise(resolve => setTimeout(resolve, 1500))
 
     router.push(`/letter/${shareToken}`)
   }
 
   if (authLoading) {
-  return <p style={{ padding: 20 }}>Loading...</p>
-}
-
+    return <p style={{ padding: 20 }}>Loading...</p>
+  }
 
   return (
     <div style={{ maxWidth: 700, margin: '0 auto', padding: 20 }}>
@@ -117,40 +125,40 @@ export default function WriteLetter() {
 
       <form onSubmit={handleSubmit} className="letter-card" style={{ padding: 28, marginTop: 20 }}>
         {!user && (
-  <div style={{
-    background: 'var(--color-paper)',
-    border: '1px solid var(--color-line)',
-    borderRadius: 8,
-    padding: 14,
-    marginBottom: 20,
-    fontSize: 14,
-    color: 'var(--color-ink-soft)',
-  }}>
-    Writing as a guest — your letter will be sent privately.{' '}
-<a href="/login" style={{ color: 'var(--color-accent)' }}>Sign in</a>{' '}
-to also write letters publicly and save everything you send to a dashboard.
-  </div>
-)}
+          <div style={{
+            background: 'var(--color-paper)',
+            border: '1px solid var(--color-line)',
+            borderRadius: 8,
+            padding: 14,
+            marginBottom: 20,
+            fontSize: 14,
+            color: 'var(--color-ink-soft)',
+          }}>
+            Writing as a guest — your letter will be sent privately.{' '}
+            <a href="/login" style={{ color: 'var(--color-accent)' }}>Sign in</a>{' '}
+            to also write letters publicly and save everything you send to a dashboard.
+          </div>
+        )}
         <div className="public-private-choice" style={{ marginBottom: 20, display: 'flex', gap: 16, alignItems: 'center' }}>
-  {user && (
-    <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-      <input
-        type="radio"
-        checked={isPublic}
-        onChange={() => setIsPublic(true)}
-      />
-      Share publicly
-    </label>
-  )}
-  <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-    <input
-      type="radio"
-      checked={!isPublic}
-      onChange={() => setIsPublic(false)}
-    />
-    Send privately
-  </label>
-</div>
+          {user && (
+            <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <input
+                type="radio"
+                checked={isPublic}
+                onChange={() => setIsPublic(true)}
+              />
+              Share publicly
+            </label>
+          )}
+          <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <input
+              type="radio"
+              checked={!isPublic || !user}
+              onChange={() => setIsPublic(false)}
+            />
+            Send privately
+          </label>
+        </div>
 
         <div style={{ marginBottom: 18 }}>
           <label style={labelStyle}>Recipient's name</label>
@@ -163,7 +171,7 @@ to also write letters publicly and save everything you send to a dashboard.
           />
         </div>
 
-        {!isPublic && (
+        {(!isPublic || !user) && (
           <>
             <div style={{ marginBottom: 18 }}>
               <label style={labelStyle}>Recipient's email</label>
@@ -203,7 +211,7 @@ to also write letters publicly and save everything you send to a dashboard.
             required
             rows={10}
             className="letter-content"
-            style={{ ...inputStyle, resize: 'vertical', fontFamily: 'var(--font-signature)'}}
+            style={{ ...inputStyle, resize: 'vertical', fontFamily: 'var(--font-signature)' }}
           />
           <p style={{
             fontSize: 13,
@@ -215,10 +223,9 @@ to also write letters publicly and save everything you send to a dashboard.
           </p>
         </div>
 
-        {/* Updated interactive button with logo and animation logic */}
         <button
           type="submit"
-          disabled={loading || isFlying} // Disable during loading AND flying
+          disabled={loading || isFlying}
           className={`
             px-7 py-3 bg-[var(--color-accent)] text-white text-[15px] rounded-lg cursor-pointer
             flex items-center justify-between gap-3 transition-all duration-300 shadow-md
@@ -230,10 +237,9 @@ to also write letters publicly and save everything you send to a dashboard.
           <span className="flex-1 text-left">
             {loading ? 'Sending...' : 'Send Letter'}
           </span>
-          {/* Logo container that allows relative flight animation */}
           <div className="w-8 h-8 flex items-center justify-center relative">
             <Image
-              src="/images/logo.png" // Assumes you've placed image_6.png in public/images/logo.png
+              src="/images/logo.png"
               alt="Paper Plane Logo"
               width={32}
               height={32}
