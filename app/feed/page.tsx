@@ -25,7 +25,6 @@ export default async function Feed({
     lettersQuery = lettersQuery.ilike('recipient_name', `%${q}%`)
   }
 
-  // Run all three queries at the same time instead of one after another
   const [
     { count: totalCount },
     { data: privateCount },
@@ -41,10 +40,10 @@ export default async function Feed({
   }
 
   return (
-    <div className="page-container" style={{ maxWidth: 700, margin: '0 auto', padding: 20 }}>
+    <div className="page-container" style={{ maxWidth: 900, margin: '0 auto', padding: 20 }}>
       <h1 style={{ fontSize: 32 }}>Letters from the Community</h1>
-      <p style={{ color: 'var(--color-ink-soft)', fontSize: 16, fontFamily: 'var(--font-instrument)', marginTop: -8, marginBottom: 24 }}>
-        {totalCount ?? 0} letter{totalCount === 1 ? '' : 's'} shared publicly · {privateCount ?? 0} sent privately
+      <p style={{ color: 'var(--color-ink-soft)', fontSize: 16, marginTop: -8, marginBottom: 24 }}>
+        {totalCount ?? 0} letter{totalCount === 1 ? '' : 's'} Paper Plane has landed · {privateCount ?? 0} Letter Delivered Privately
       </p>
 
       <form style={{ marginBottom: 24 }}>
@@ -52,7 +51,7 @@ export default async function Feed({
           type="text"
           name="q"
           defaultValue={q}
-          placeholder="Search by recipient's name..."
+          placeholder="Whose letter are you looking for?"
           style={{
             width: '100%',
             padding: 10,
@@ -72,28 +71,32 @@ export default async function Feed({
 
       {(!letters || letters.length === 0) && <p>No letters found.</p>}
 
-      {letters && letters.map((letter) => (
-        <Link
-          key={letter.id}
-          href={`/letter/${letter.share_token}`}
-          className="letter-card"
-          style={{
-            display: 'block',
-            padding: 20,
-            marginBottom: 16,
-            textDecoration: 'none',
-            color: 'inherit',
-          }}
-        >
-          <h3 style={{ fontSize: 22, margin: 0 }}>A letter for {letter.recipient_name}</h3>
-          <p style={{ color: 'var(--color-ink-soft)', fontSize: 16, marginTop: 6, marginBottom: 0 }}>
-            by {letter.profiles?.username}
-          </p>
-          <p style={{ color: 'var(--color-ink-soft)', fontSize: 13, marginTop: 4, marginBottom: 0 }}>
-            {new Date(letter.created_at).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
-          </p>
-        </Link>
-      ))}
+      <div className="feed-grid">
+        {letters && letters.map((letter) => (
+          <Link
+  key={letter.id}
+  href={`/letter/${letter.share_token}`}
+  className="letter-card feed-card envelope-card"
+  style={{
+    display: 'block',
+    padding: 22,
+    textDecoration: 'none',
+    color: 'inherit',
+  }}
+>
+  <div className="envelope-flap" />
+  <div className="envelope-seal" />
+
+  <h3 style={{ fontSize: 21, margin: 0 }}>A letter for {letter.recipient_name}</h3>
+  <p className="feed-snippet" style={{ color: 'var(--color-ink-soft)', fontSize: 15, marginTop: 10, marginBottom: 0, lineHeight: 1.5 }}>
+    {letter.content}
+  </p>
+  <p style={{ color: 'var(--color-ink-soft)', fontSize: 13, marginTop: 14, marginBottom: 0 }}>
+    by {letter.profiles?.username} · {new Date(letter.created_at).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
+  </p>
+</Link>
+        ))}
+      </div>
     </div>
   )
 }

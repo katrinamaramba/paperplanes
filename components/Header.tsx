@@ -22,22 +22,25 @@ export default function Header() {
   const linkStyle = {
     textDecoration: 'none',
     color: 'var(--color-ink)',
-    fontSize: 17,
+    fontSize: 18,
     lineHeight: 1,
   }
 
   const getLinkStyle = (href: string) => ({
     textDecoration: 'none',
     color: pathname === href ? 'var(--color-accent)' : 'var(--color-ink)',
-    fontWeight: pathname === href ? 600 : 400,
-    fontSize: 17,
+    fontWeight: pathname === href ? 600 : 500,
+    fontSize: 18,
   })
+
+  const navClass = (href: string) =>
+    `nav-link${pathname === href ? ' nav-link-active' : ''}`
 
   return (
     <header
       style={{
         background: '#FAF9F6',
-        padding: '16px 20px',
+        padding: '20px 20px',
         position: 'sticky',
         top: 0,
         zIndex: 50,
@@ -66,22 +69,22 @@ export default function Header() {
           style={{
             display: 'flex',
             justifyContent: 'center',
-            gap: 24,
+            gap: 36,
             alignItems: 'center',
-            fontSize: 17,
+            fontSize: 18,
             position: 'absolute',
             left: '50%',
             transform: 'translateX(-50%)',
             width: '100%',
-            maxWidth: 600,
+            maxWidth: 640,
             padding: '0 20px',
             zIndex: 10,
           }}
         >
-          <Link href="/feed" style={getLinkStyle('/feed')}>Feed</Link>
-          <Link href="/about" style={getLinkStyle('/about')}>About</Link>
-          {user && <Link href="/write" style={getLinkStyle('/write')}>Write a Letter</Link>}
-          {user && <Link href="/dashboard" style={getLinkStyle('/dashboard')}>Dashboard</Link>}
+          <Link href="/feed" className={navClass('/feed')} style={getLinkStyle('/feed')}>Feed</Link>
+          <Link href="/about" className={navClass('/about')} style={getLinkStyle('/about')}>About</Link>
+          {user && <Link href="/write" className={navClass('/write')} style={getLinkStyle('/write')}>Write a Letter</Link>}
+          {user && <Link href="/dashboard" className={navClass('/dashboard')} style={getLinkStyle('/dashboard')}>Dashboard</Link>}
         </nav>
 
         <div className="desktop-nav" style={{ flexShrink: 0, zIndex: 20 }}>
@@ -93,9 +96,9 @@ export default function Header() {
                 background: 'none',
                 border: '1px solid var(--color-line)',
                 borderRadius: 6,
-                padding: '6px 14px',
+                padding: '8px 16px',
                 fontFamily: 'var(--font-ui)',
-                fontSize: 14,
+                fontSize: 15,
                 color: 'var(--color-ink-soft)',
               }}
             >
@@ -104,7 +107,7 @@ export default function Header() {
           ) : (
             <Link
               href="/login"
-              style={{ ...linkStyle, padding: '6px 16px', background: 'var(--color-accent)', color: '#fff', borderRadius: 6 }}
+              style={{ ...linkStyle, padding: '8px 18px', background: 'var(--color-accent)', color: '#fff', borderRadius: 6 }}
             >
               Log In
             </Link>
