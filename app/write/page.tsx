@@ -36,15 +36,12 @@ export default function WriteLetter() {
   const [recipientEmail, setRecipientEmail] = useState('')
   const [content, setContent] = useState('')
   const [senderName, setSenderName] = useState('')
-  // Default to false (private) always. Only a logged-in user can ever flip this,
-  // since the public radio button below only renders when `user` exists.
   const [isPublic, setIsPublic] = useState(false)
   const [loading, setLoading] = useState(false)
   const [isFlying, setIsFlying] = useState(false)
   const isSubmittingRef = useRef(false)
   const router = useRouter()
 
-  // If someone logs out mid-session while this was set to public, snap it back to private.
   useEffect(() => {
     if (!authLoading && !user && isPublic) {
       setIsPublic(false)
@@ -54,14 +51,12 @@ export default function WriteLetter() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Blocks duplicate submissions instantly, before React even has a chance
-    // to re-render and disable the button. Rapid double/triple clicks land
-    // here on the very first line, no matter how fast they happen.
+    // Blocks duplicate submissions instantly, before React even re-renders
+    // to disable the button. Rapid clicks land here on the very first line.
     if (isSubmittingRef.current) return
     isSubmittingRef.current = true
 
     // Never trust client state alone for something the database enforces.
-    // A guest (no user) can only ever submit privately, full stop.
     const effectivePublic = isPublic && !!user
 
     setLoading(true)
@@ -69,59 +64,75 @@ export default function WriteLetter() {
 
     const shareToken = crypto.randomUUID()
 
-    const { data, error } = await supabase
-      .from('letters')
-      .insert([
-        {
-          author_id: user?.id ?? null,
-          recipient_name: recipientName,
-          recipient_email: effectivePublic ? null : recipientEmail,
-          sender_name: effectivePublic ? null : senderName,
-          content: content,
-          is_public: effectivePublic,
-          share_token: shareToken,
-        },
-      ])
-      .select()
-      .single()
+    try {
+      const { data, error } = await supabase
+        .from('letters')
+        .insert([
+          {
+            author_id: user?.id ?? null,
+            recipient_name: recipientName,
+            recipient_email: effectivePublic ? null : recipientEmail,
+            sender_name: effectivePublic ? null : senderName,
+            content: content,
+            is_public: effectivePublic,
+            share_token: shareToken,
+          },
+        ])
+        .select()
+        .single()
 
-    setLoading(false)
-    setIsFlying(false)
-
-    if (error) {
-      isSubmittingRef.current = false
-      if (error.code === '42501' || error.message?.toLowerCase().includes('row-level security')) {
-        alert('Sharing a letter publicly requires an account. Please sign in and try again — your letter was not sent.')
-      } else {
-        alert('Something went wrong: ' + error.message)
-      }
-      return
-    }
-
-    if (!effectivePublic) {
-      const res = await fetch('/api/send-letter', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          recipientEmail,
-          recipientName,
-          senderName,
-          shareToken,
-          userId: user?.id ?? null,
-        }),
-      })
-
-      if (!res.ok) {
+      if (error) {
+        // Only reset here — the letter was never created, so it's safe to retry.
         isSubmittingRef.current = false
-        const result = await res.json()
-        alert(result.error || "Something went wrong sending the email. You've reached today's limit of 2 private letters. Try again tomorrow.")
+        setLoading(false)
+        setIsFlying(false)
+
+        if (error.code === '42501' || error.message?.toLowerCase().includes('row-level security')) {
+          alert('Sharing a letter publicly requires an account. Please sign in and try again — your letter was not sent.')
+        } else {
+          alert('Something went wrong: ' + error.message)
+        }
         return
       }
+
+      if (!effectivePublic) {
+        const res = await fetch('/api/send-letter', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            recipientEmail,
+            recipientName,
+            senderName,
+            shareToken,
+            userId: user?.id ?? null,
+          }),
+        })
+
+        if (!res.ok) {
+          const result = await res.json()
+
+          // Important: the letter already exists in the database at this point.
+          // Don't unlock isSubmittingRef here — a retry would create a duplicate.
+          setLoading(false)
+          setIsFlying(false)
+
+          alert(result.error || "The letter was created, but we couldn't send the email. Please try again later.")
+          return
+        }
+      }
+
+      // Small pause so the flying-plane animation is actually visible.
+      // loading/isFlying deliberately stay true here — the button should
+      // look "in progress" all the way through until navigation happens.
+      await new Promise(resolve => setTimeout(resolve, 300))
+
+      router.push(`/letter/${shareToken}`)
+    } catch (err) {
+      isSubmittingRef.current = false
+      setLoading(false)
+      setIsFlying(false)
+      alert('Something went wrong while sending your letter. Please try again.')
     }
-
-    await new Promise(resolve => setTimeout(resolve, 300))
-
-    router.push(`/letter/${shareToken}`)
   }
 
   if (authLoading) {
@@ -258,7 +269,7 @@ export default function WriteLetter() {
                 }}
               />
             )}
-            {loading ? 'Sending your letter...' : 'Send Letter'}
+            {loading ? 'Your letter is taking flight...' : 'Send Letter'}
           </span>
           <div className="w-8 h-8 flex items-center justify-center relative">
             <Image
