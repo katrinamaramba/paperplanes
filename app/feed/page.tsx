@@ -41,10 +41,55 @@ export default async function Feed({
 
   return (
     <div className="page-container" style={{ maxWidth: 900, margin: '0 auto', padding: 20 }}>
-      <h1 style={{ fontSize: 32 }}>Letters from the Community</h1>
-      <p style={{ color: 'var(--color-ink-soft)', fontSize: 16, marginTop: -8, marginBottom: 24 }}>
-        {totalCount ?? 0} letter{totalCount === 1 ? '' : 's'} Paper Plane has landed · {privateCount ?? 0} Letter Delivered Privately
-      </p>
+      <style>{`
+        @keyframes page-header-rise {
+          0% { opacity: 0; transform: translateY(12px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        .page-header-icon { opacity: 0; animation: page-header-rise 0.6s ease-out 0.05s forwards; }
+        .page-header-eyebrow { opacity: 0; animation: page-header-rise 0.6s ease-out 0.15s forwards; }
+        .page-header-title { opacity: 0; animation: page-header-rise 0.6s ease-out 0.25s forwards; }
+        .page-header-flourish { opacity: 0; animation: page-header-rise 0.6s ease-out 0.35s forwards; }
+        .page-header-count { opacity: 0; animation: page-header-rise 0.6s ease-out 0.4s forwards; }
+      `}</style>
+
+      <div style={{ textAlign: 'center', marginBottom: 32 }}>
+        <div className="page-header-icon" style={{ display: 'flex', justifyContent: 'center', marginBottom: 10 }}>
+          <img src="/images/logo.png" alt="" width={30} height={30} />
+        </div>
+
+        <p
+          className="page-header-eyebrow"
+          style={{
+            fontSize: 12,
+            letterSpacing: 2,
+            textTransform: 'uppercase',
+            color: 'var(--color-ink-soft)',
+            margin: '0 0 10px 0',
+          }}
+        >
+          Shared with the world
+        </p>
+
+        <h1 className="page-header-title" style={{ fontSize: 34, margin: 0 }}>
+          Letters from the Community
+        </h1>
+
+        <div
+          className="page-header-flourish"
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, margin: '14px 0 0 0' }}
+        >
+          <span style={{ width: 32, height: 1, background: 'var(--color-line)' }} />
+          <svg width="10" height="10" viewBox="0 0 10 10">
+            <circle cx="5" cy="5" r="3.5" fill="var(--color-accent)" opacity="0.6" />
+          </svg>
+          <span style={{ width: 32, height: 1, background: 'var(--color-line)' }} />
+        </div>
+
+        <p className="page-header-count" style={{ color: 'var(--color-ink-soft)', fontSize: 15, marginTop: 14, marginBottom: 0 }}>
+          {totalCount ?? 0} letter{totalCount === 1 ? '' : 's'} Paper Plane has landed · {privateCount ?? 0} Letter Delivered Privately
+        </p>
+      </div>
 
       <form style={{ marginBottom: 24 }}>
         <input
@@ -74,27 +119,27 @@ export default async function Feed({
       <div className="feed-grid">
         {letters && letters.map((letter) => (
           <Link
-  key={letter.id}
-  href={`/letter/${letter.share_token}`}
-  className="letter-card feed-card envelope-card"
-  style={{
-    display: 'block',
-    padding: 22,
-    textDecoration: 'none',
-    color: 'inherit',
-  }}
->
-  <div className="envelope-flap" />
-  <div className="envelope-seal" />
+            key={letter.id}
+            href={`/letter/${letter.share_token}`}
+            className="letter-card feed-card envelope-card"
+            style={{
+              display: 'block',
+              padding: 22,
+              textDecoration: 'none',
+              color: 'inherit',
+            }}
+          >
+            <div className="envelope-flap" />
+            <div className="envelope-seal" />
 
-  <h3 style={{ fontSize: 21, margin: 0 }}>A letter for {letter.recipient_name}</h3>
-  <p className="feed-snippet" style={{ color: 'var(--color-ink-soft)', fontSize: 15, marginTop: 10, marginBottom: 0, lineHeight: 1.5 }}>
-    {letter.content}
-  </p>
-  <p style={{ color: 'var(--color-ink-soft)', fontSize: 13, marginTop: 14, marginBottom: 0 }}>
-    by {letter.profiles?.username} · {new Date(letter.created_at).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
-  </p>
-</Link>
+            <h3 style={{ fontSize: 21, margin: 0 }}>A letter for {letter.recipient_name}</h3>
+            <p className="feed-snippet" style={{ color: 'var(--color-ink-soft)', fontSize: 15, marginTop: 10, marginBottom: 0, lineHeight: 1.5 }}>
+              {letter.content}
+            </p>
+            <p style={{ color: 'var(--color-ink-soft)', fontSize: 13, marginTop: 14, marginBottom: 0 }}>
+              by {letter.profiles?.username} · {new Date(letter.created_at).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
+            </p>
+          </Link>
         ))}
       </div>
     </div>
