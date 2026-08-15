@@ -51,12 +51,9 @@ export default function WriteLetter() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Blocks duplicate submissions instantly, before React even re-renders
-    // to disable the button. Rapid clicks land here on the very first line.
     if (isSubmittingRef.current) return
     isSubmittingRef.current = true
 
-    // Never trust client state alone for something the database enforces.
     const effectivePublic = isPublic && !!user
 
     setLoading(true)
@@ -82,7 +79,6 @@ export default function WriteLetter() {
         .single()
 
       if (error) {
-        // Only reset here — the letter was never created, so it's safe to retry.
         isSubmittingRef.current = false
         setLoading(false)
         setIsFlying(false)
@@ -110,20 +106,13 @@ export default function WriteLetter() {
 
         if (!res.ok) {
           const result = await res.json()
-
-          // Important: the letter already exists in the database at this point.
-          // Don't unlock isSubmittingRef here — a retry would create a duplicate.
           setLoading(false)
           setIsFlying(false)
-
           alert(result.error || "The letter was created, but we couldn't send the email. Please try again later.")
           return
         }
       }
 
-      // Small pause so the flying-plane animation is actually visible.
-      // loading/isFlying deliberately stay true here — the button should
-      // look "in progress" all the way through until navigation happens.
       await new Promise(resolve => setTimeout(resolve, 300))
 
       router.push(`/letter/${shareToken}`)
@@ -141,7 +130,50 @@ export default function WriteLetter() {
 
   return (
     <div style={{ maxWidth: 700, margin: '0 auto', padding: 20 }}>
-      <h1 style={{ fontSize: 32 }}>Write a Letter</h1>
+      <style>{`
+        @keyframes page-header-rise {
+          0% { opacity: 0; transform: translateY(12px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        .page-header-icon { opacity: 0; animation: page-header-rise 0.6s ease-out 0.05s forwards; }
+        .page-header-eyebrow { opacity: 0; animation: page-header-rise 0.6s ease-out 0.15s forwards; }
+        .page-header-title { opacity: 0; animation: page-header-rise 0.6s ease-out 0.25s forwards; }
+        .page-header-flourish { opacity: 0; animation: page-header-rise 0.6s ease-out 0.35s forwards; }
+      `}</style>
+
+      <div style={{ textAlign: 'center', marginBottom: 32 }}>
+        <div className="page-header-icon" style={{ display: 'flex', justifyContent: 'center', marginBottom: 10 }}>
+          <img src="/images/logo.png" alt="" width={30} height={30} />
+        </div>
+
+        <p
+          className="page-header-eyebrow"
+          style={{
+            fontSize: 12,
+            letterSpacing: 2,
+            textTransform: 'uppercase',
+            color: 'var(--color-ink-soft)',
+            margin: '0 0 10px 0',
+          }}
+        >
+          Put it into words
+        </p>
+
+        <h1 className="page-header-title" style={{ fontSize: 34, margin: 0 }}>
+          Write a Letter
+        </h1>
+
+        <div
+          className="page-header-flourish"
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, margin: '14px 0 0 0' }}
+        >
+          <span style={{ width: 32, height: 1, background: 'var(--color-line)' }} />
+          <svg width="10" height="10" viewBox="0 0 10 10">
+            <circle cx="5" cy="5" r="3.5" fill="var(--color-accent)" opacity="0.6" />
+          </svg>
+          <span style={{ width: 32, height: 1, background: 'var(--color-line)' }} />
+        </div>
+      </div>
 
       <form onSubmit={handleSubmit} className="letter-card" style={{ padding: 28, marginTop: 20 }}>
         {!user && (
